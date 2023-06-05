@@ -7,6 +7,7 @@ import {
 } from '@angular/forms';
 import { Country } from 'src/app/common/country';
 import { State } from 'src/app/common/state';
+import { CartService } from 'src/app/services/cart.service';
 import { TanujazonFormService } from 'src/app/services/tanujazon-form.service';
 import { TanujazonValidators } from 'src/app/validators/tanujazon-validators';
 
@@ -31,10 +32,13 @@ export class CheckoutComponent implements OnInit {
 
     constructor(
         private formBuilder: FormBuilder,
-        private tanujazonFormService: TanujazonFormService
+        private tanujazonFormService: TanujazonFormService,
+        private cartService: CartService
     ) {}
 
     ngOnInit(): void {
+        this.reviewCartDetails();
+
         this.checkoutFormGroup = this.formBuilder.group({
             customer: this.formBuilder.group({
                 firstName: new FormControl('', [
@@ -99,8 +103,14 @@ export class CheckoutComponent implements OnInit {
                     Validators.minLength(2),
                     TanujazonValidators.notOnlyWhiteSpace,
                 ]),
-                cardNumber: new FormControl('', [Validators.required, Validators.pattern('[0-9]{16}')]),
-                securityCode: new FormControl('', [Validators.required, Validators.pattern('[0-9]{3}')]),
+                cardNumber: new FormControl('', [
+                    Validators.required,
+                    Validators.pattern('[0-9]{16}'),
+                ]),
+                securityCode: new FormControl('', [
+                    Validators.required,
+                    Validators.pattern('[0-9]{3}'),
+                ]),
                 expirationMonth: new FormControl('', [Validators.required]),
                 expirationYear: new FormControl('', [Validators.required]),
             }),
@@ -130,6 +140,17 @@ export class CheckoutComponent implements OnInit {
             console.log('Retrieved countries: ' + JSON.stringify(data));
             this.countries = data;
         });
+    }
+
+    reviewCartDetails() {
+        // subscribe to cartService.totalQuantity
+        this.cartService.totalQuantity.subscribe(
+            (totalQuantity) => (this.totalQuantity = totalQuantity)
+        );
+        // subscribe to cartService.totalPrice
+        this.cartService.totalPrice.subscribe(
+            (totalPrice) => (this.totalPrice = totalPrice)
+        );
     }
 
     get firstName() {
