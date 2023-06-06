@@ -8,8 +8,8 @@ import { State } from '../common/state';
     providedIn: 'root',
 })
 export class TanujazonFormService {
-    private countriesUrl = 'http://localhost:8082/api/countries';
-    private statesUrl = 'http://localhost:8082/api/states';
+    private countriesUrl = 'http://localhost:9090/api/countries';
+    private statesUrl = 'http://localhost:9090/api/states';
 
     constructor(private httpClient: HttpClient) {}
 

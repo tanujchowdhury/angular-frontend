@@ -8,9 +8,9 @@ import { ProductCategory } from '../common/product-category';
     providedIn: 'root',
 })
 export class ProductService {
-    private baseUrl = 'http://localhost:8081/api/products';
+    private baseUrl = 'http://localhost:9090/api/products';
 
-    private categoryUrl = 'http://localhost:8081/api/product-category';
+    private categoryUrl = 'http://localhost:9090/api/product-category';
 
     constructor(private httpClient: HttpClient) {}
 
