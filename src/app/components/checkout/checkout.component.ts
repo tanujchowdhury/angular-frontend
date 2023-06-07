@@ -35,6 +35,8 @@ export class CheckoutComponent implements OnInit {
     shippingAddressStates: State[] = [];
     billingAddressStates: State[] = [];
 
+    storage: Storage = sessionStorage;
+
     constructor(
         private formBuilder: FormBuilder,
         private tanujazonFormService: TanujazonFormService,
@@ -46,19 +48,40 @@ export class CheckoutComponent implements OnInit {
     ngOnInit(): void {
         this.reviewCartDetails();
 
+        // read the user's first name from browsers storage
+        const userFirstNameStorageItem = this.storage.getItem('firstName');
+        let theFirstName = '';
+        if (userFirstNameStorageItem !== null) {
+            theFirstName = JSON.parse(userFirstNameStorageItem);
+        }
+
+        // read the user's first last from browsers storage
+        const userLastNameStorageItem = this.storage.getItem('lastName');
+        let theLastName = '';
+        if (userLastNameStorageItem !== null) {
+            theLastName = JSON.parse(userLastNameStorageItem);
+        }
+
+        // read the user's email from browsers storage
+        const userEmailStorageItem = this.storage.getItem('userEmail');
+        let theEmail = '';
+        if (userEmailStorageItem !== null) {
+            theEmail = JSON.parse(userEmailStorageItem);
+        }
+
         this.checkoutFormGroup = this.formBuilder.group({
             customer: this.formBuilder.group({
-                firstName: new FormControl('', [
+                firstName: new FormControl(theFirstName, [
                     Validators.required,
                     Validators.minLength(2),
                     TanujazonValidators.notOnlyWhiteSpace,
                 ]),
-                lastName: new FormControl('', [
+                lastName: new FormControl(theLastName, [
                     Validators.required,
                     Validators.minLength(2),
                     TanujazonValidators.notOnlyWhiteSpace,
                 ]),
-                email: new FormControl('', [
+                email: new FormControl(theEmail, [
                     Validators.required,
                     Validators.pattern(
                         '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$'
